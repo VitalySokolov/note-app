@@ -6,3 +6,6 @@ dist/
 
 # Intellij
 .idea/
+
+#Data
+notes-data.json

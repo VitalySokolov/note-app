@@ -1,25 +1,31 @@
 const fs = require('fs');
-const _ = require('lodash');
+
+const DATA_FILENAME = 'notes-data.json';
+const fetchNotes = () => {
+  try {
+    const noteString = fs.readFileSync(DATA_FILENAME);
+    return JSON.parse(noteString);
+  } catch (e) {
+    return [];
+  }
+};
+
+const saveNotes = (notes) => {
+  fs.writeFileSync(DATA_FILENAME, JSON.stringify(notes));
+};
 
 const addNote = (title, body) => {
-  let notes = [];
+  let notes = fetchNotes();
   const note = {
     title,
     body
   };
 
-  try {
-    const noteString = fs.readFileSync('notes-data.json');
-    notes = JSON.parse(noteString);
-  } catch (e) {
-
-  }
-  // console.log(`Lodash = ${JSON.stringify(_.uniqBy(notes, 'title'))}`);
-
   const duplicateNotes = notes.filter((note) => note.title === title);
   if (duplicateNotes.length === 0) {
     notes.push(note);
-    fs.writeFileSync('notes-data.json', JSON.stringify(notes));
+    saveNotes(notes);
+    return note;
   }
 };
 
@@ -28,7 +34,13 @@ const readNote = (title) => {
 };
 
 const removeNote = (title) => {
-  console.log('Remove note', title);
+  const notes = fetchNotes();
+  const newNotes = notes.filter((note) => note.title !== title);
+
+  if (notes.length !== newNotes.length) {
+    saveNotes(newNotes);
+    return true;
+  }
 };
 
 const listNotes = () => {
