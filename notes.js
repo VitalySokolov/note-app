@@ -15,10 +15,10 @@ const saveNotes = (notes) => {
 };
 
 const addNote = (title, body) => {
-  let notes = fetchNotes();
+  const notes = fetchNotes();
   const note = {
     title,
-    body
+    body,
   };
 
   const duplicateNotes = notes.filter((note) => note.title === title);
@@ -30,7 +30,10 @@ const addNote = (title, body) => {
 };
 
 const readNote = (title) => {
-  console.log('Read note', title);
+  const notes = fetchNotes();
+  const filteredNotes = notes.filter((note) => note.title === title);
+
+  return filteredNotes[0];
 };
 
 const removeNote = (title) => {
@@ -41,10 +44,12 @@ const removeNote = (title) => {
     saveNotes(newNotes);
     return true;
   }
+
+  return false;
 };
 
 const listNotes = () => {
-  console.log('List notes');
+  return fetchNotes();
 };
 
 module.exports = {
